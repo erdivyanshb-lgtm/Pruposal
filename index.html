@@ -356,16 +356,6 @@
             50% { box-shadow: 0 0 20px gold; }
             100% { box-shadow: 0 0 5px gold; }
         }
-        
-        @keyframes move-together {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(50px); }
-        }
-        
-        @keyframes move-apart {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50px); }
-        }
     </style>
 </head>
 <body>
@@ -424,7 +414,11 @@
     </div>
 
     <script>
+        // Wait for the DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM loaded - initializing buttons");
+            
+            // Get all elements
             const yesBtn = document.getElementById('yes-btn');
             const noBtn = document.getElementById('no-btn');
             const proposalBox = document.getElementById('proposal-box');
@@ -439,55 +433,80 @@
             ring.style.opacity = '1';
             ring.style.animation = 'ring-glow 2s infinite';
             
-            // Yes button click - happy scenario
-            yesBtn.addEventListener('click', function() {
+            // Add click event listeners with proper error handling
+            if (yesBtn) {
+                yesBtn.addEventListener('click', handleYesClick);
+                console.log("Yes button event listener added");
+            } else {
+                console.error("Yes button not found!");
+            }
+            
+            if (noBtn) {
+                noBtn.addEventListener('click', handleNoClick);
+                console.log("No button event listener added");
+            } else {
+                console.error("No button not found!");
+            }
+            
+            // Yes button handler
+            function handleYesClick() {
+                console.log("Yes button clicked");
+                
                 // Hide proposal box
-                proposalBox.classList.add('hidden');
+                if (proposalBox) {
+                    proposalBox.classList.add('hidden');
+                }
                 
                 // Move characters closer together
-                boy.style.transform = 'translateX(50px)';
-                girl.style.transform = 'translateX(-50px)';
+                if (boy) boy.style.transform = 'translateX(50px)';
+                if (girl) girl.style.transform = 'translateX(-50px)';
                 
                 // Create hugging animation
                 setTimeout(() => {
-                    boy.style.animation = 'hug 1.5s ease-in-out 2';
-                    girl.style.animation = 'hug 1.5s ease-in-out 2';
+                    if (boy) boy.style.animation = 'hug 1.5s ease-in-out 2';
+                    if (girl) girl.style.animation = 'hug 1.5s ease-in-out 2';
                     
                     // Create hearts animation
                     createHearts();
                     
                     // Show happy message
                     setTimeout(() => {
-                        happyMessage.style.opacity = '1';
+                        if (happyMessage) happyMessage.style.opacity = '1';
                     }, 2000);
                 }, 800);
-            });
+            }
             
-            // No button click - sad scenario
-            noBtn.addEventListener('click', function() {
+            // No button handler
+            function handleNoClick() {
+                console.log("No button clicked");
+                
                 // Hide proposal box
-                proposalBox.classList.add('hidden');
+                if (proposalBox) {
+                    proposalBox.classList.add('hidden');
+                }
                 
                 // Move characters apart
-                boy.style.transform = 'translateX(-50px)';
-                girl.style.transform = 'translateX(50px)';
+                if (boy) boy.style.transform = 'translateX(-50px)';
+                if (girl) girl.style.transform = 'translateX(50px)';
                 
                 // Create crying animation
                 setTimeout(() => {
-                    boy.style.animation = 'cry 1s ease-in-out infinite';
+                    if (boy) boy.style.animation = 'cry 1s ease-in-out infinite';
                     
                     // Create tears
                     createTears();
                     
                     // Show sad message
                     setTimeout(() => {
-                        sadMessage.style.opacity = '1';
+                        if (sadMessage) sadMessage.style.opacity = '1';
                     }, 2000);
                 }, 800);
-            });
+            }
             
             // Function to create floating hearts
             function createHearts() {
+                if (!heartsContainer) return;
+                
                 for (let i = 0; i < 25; i++) {
                     setTimeout(() => {
                         const heart = document.createElement('div');
@@ -507,7 +526,6 @@
                         const colors = ['#ff6b6b', '#ff8e8e', '#ff5252', '#ff3838'];
                         const color = colors[Math.floor(Math.random() * colors.length)];
                         heart.style.backgroundColor = color;
-                        heart.style.setProperty('--heart-color', color);
                         
                         heartsContainer.appendChild(heart);
                         
@@ -557,4 +575,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
